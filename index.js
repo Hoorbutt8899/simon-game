@@ -21,13 +21,14 @@ $(document).keypress(function() {
   startGame();
 });
 
-// 3. Call it when the screen is clicked/tapped (Mobile Phones)
-$(document).click(function(event) {
+// // 3. Call it when the screen is clicked/tapped (Mobile Phones)
+$(document).on("click touchstart", function(event) {
   // In mobile phones This makes sure clicking the actual game buttons doesn't trigger a restart
   if (!$(event.target).hasClass("btn")) {
     startGame();
   }
 });
+
 
 
 $(".btn").click(function() {

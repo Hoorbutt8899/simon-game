@@ -7,20 +7,28 @@ var userClickedPattern = [];
 var started = false;
 var level = 0;
 
-$(document).keypress(function() {
+// 1. Create the standalone startGame function
+function startGame() {
   if (!started) {
     $("#level-title").text("Level " + level);
     nextSequence();
     started = true;
   }
+}
+
+// 2. Call it when a key is pressed (Laptops)
+$(document).keypress(function() {
+  startGame();
 });
 
+// 3. Call it when the screen is clicked/tapped (Mobile Phones)
 $(document).click(function(event) {
-  //in mobile phones This makes sure clicking the actual game buttons doesn't trigger a restart
+  // In mobile phones This makes sure clicking the actual game buttons doesn't trigger a restart
   if (!$(event.target).hasClass("btn")) {
     startGame();
   }
 });
+
 
 $(".btn").click(function() {
 

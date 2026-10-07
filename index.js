@@ -1,4 +1,3 @@
-
 var buttonColours = ["red", "blue", "green", "yellow"];
 
 var gamePattern = [];
@@ -16,22 +15,24 @@ function startGame() {
   }
 }
 
-// 2. Call it when a key is pressed (Laptops)
-$(document).keypress(function() {
-  startGame();
-});
-
-// // 3. Call it when the screen is clicked/tapped (Mobile Phones)
-$(document).on("click touchstart", function(event) {
-  // In mobile phones This makes sure clicking the actual game buttons doesn't trigger a restart
-  if (!$(event.target).hasClass("btn")) {
+// 2. Start the game on a laptop keypress OR a mobile screen tap/touch
+$(document).on("keypress click touchstart", function(event) {
+  // If the game hasn't started yet, any interaction starts it
+  if (!started) {
     startGame();
   }
 });
 
+// 3. Handle button clicks during gameplay
+$(".btn").click(function(event) {
+  // CRITICAL MOBILE FIX: If the game hasn't started yet, ignore button colors 
+  // so it doesn't trigger an instant "Game Over"
+  if (!started) {
+    return; 
+  }
 
-
-$(".btn").click(function() {
+  // Prevent the click from bubbling up and interfering with the document listener
+  event.stopPropagation();
 
   var userChosenColour = $(this).attr("id");
   userClickedPattern.push(userChosenColour);
@@ -43,7 +44,6 @@ $(".btn").click(function() {
 });
 
 function checkAnswer(currentLevel) {
-
     if (gamePattern[currentLevel] === userClickedPattern[currentLevel]) {
       if (userClickedPattern.length === gamePattern.length){
         setTimeout(function () {
@@ -53,7 +53,9 @@ function checkAnswer(currentLevel) {
     } else {
       playSound("wrong");
       $("body").addClass("game-over");
-      $("#level-title").text("Game Over, Press Any Key to Restart");
+      
+      // Updated title text to make sense for mobile users too!
+      $("#level-title").text("Game Over, Press Any Key or Tap to Restart");
 
       setTimeout(function () {
         $("body").removeClass("game-over");
@@ -62,7 +64,6 @@ function checkAnswer(currentLevel) {
       startOver();
     }
 }
-
 
 function nextSequence() {
   userClickedPattern = [];

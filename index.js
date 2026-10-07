@@ -15,6 +15,13 @@ $(document).keypress(function() {
   }
 });
 
+$(document).click(function(event) {
+  //in mobile phones This makes sure clicking the actual game buttons doesn't trigger a restart
+  if (!$(event.target).hasClass("btn")) {
+    startGame();
+  }
+});
+
 $(".btn").click(function() {
 
   var userChosenColour = $(this).attr("id");
